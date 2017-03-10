@@ -1,4 +1,4 @@
-//// CIS*4280 A1
+//// CIS*4280 A3
 //// Andrew Downie - 0786342
 
 
@@ -10,36 +10,6 @@
 /* Frames per second code taken from : */
 /* http://www.lighthouse3d.com/opengl/glut/index.php?fps */
 
-////
-//TODO:////////////////////////////////////////////////////////////
-// - if you fly and try to leave the map on the x axis, the game will seg-fault
-///
-
-///
-/// Function call overview ------------------------------
-///
-// root: + main
-//       |---> graphicsInit
-//       |---> BuildWorldShell
-//       |---> SetupWalls
-//       |---> PrintWorldGeneration
-//       |---> CountAllWalls
-//       |---> PlaceWalls
-//       |---> glutMainLoop
-//
-// root: + update
-//       |---> glutGet (current time)
-//       |---> ChangeWalls
-//       |---> PlaceWalls
-//       |---> collisionRespose
-//
-// root: + collisionResponse
-//       |---> DeltaGravity
-//       |---> IsWalkablePiece
-//       |---> getViewPosition
-//       |---> getOldViewPosition
-//       |---> setViewPosition
-//       |---> glutGet (current time)
 
 
 
@@ -138,6 +108,62 @@ Projectile projectiles[MAX_PROJECTILES];
 ///           walls that touch it.
 ///
 Pillar pillars[WALL_COUNT_X - 1][WALL_COUNT_Z - 1];
+
+///
+/// Mobs
+///
+#define MOB_PIXEL_COUNT 9
+
+/// MOB: X-ER
+#define XER_FRAME_COUNT 4
+int XER_ANIMATION[XER_FRAME_COUNT][MOB_PIXEL_COUNT] = {
+    {
+        1, 0, 1,
+        0, 1, 0,
+        1, 0, 1
+    },
+    {
+        0, 1, 0,
+        0, 1, 0,
+        0, 1, 0
+    },
+    {
+        1, 0, 1,
+        0, 1, 0,
+        1, 0, 1
+    },
+    {
+        0, 0, 0,
+        1, 1, 1,
+        0, 0, 0
+    }
+};
+
+/// MOB: Circler
+#define CIRCLER_FRAME_COUNT 4
+int CIRCLER_ANIMATION[CIRCLER_FRAME_COUNT][MOB_PIXEL_COUNT] = {
+    {
+        1, 0, 1,
+        0, 1, 0,
+        1, 0, 1
+    },
+    {
+        0, 1, 0,
+        1, 1, 1,
+        0, 1, 0
+    },
+    {
+        1, 1, 1,
+        1, 0, 1,
+        1, 1, 1
+    },
+    {
+        0, 1, 0,
+        1, 1, 1,
+        0, 1, 0
+    }
+
+};
 
 
 
@@ -466,7 +492,9 @@ void draw2D() {
 
 
 
-
+    ///
+    /// Minimap display mode: hidden, top right, full screen
+    ///
     if(displayMap == 0){
         return;
     }
@@ -485,7 +513,9 @@ void draw2D() {
 
 
 
-
+    ///
+    /// Calculate scaling for the Minimap
+    ///
     widthRatio = ceil(screenWidth / MAP_SIZE_X * map_ratio);
     heightRatio = ceil(screenHeight / MAP_SIZE_Z * map_ratio);
 
@@ -868,29 +898,6 @@ int main(int argc, char** argv)
 
         printf("Wall count: %d\n", CountAllWalls());
 
-
-        ///
-        /// Setup some cubes to climb up for testing
-        ///
-       /* world[3][1][2] = 5;
-
-        world[2][1][2] = 5;
-        world[2][2][2] = 5;
-
-        world[2][1][3] = 5;
-        world[2][2][3] = 5;
-        world[2][3][3] = 5;
-
-        world[3][1][3] = 5;
-        world[3][2][3] = 5;
-        world[3][3][3] = 5;
-        world[3][4][3] = 5;
-
-        world[3][1][4] = 5;
-        world[3][2][4] = 5;
-        world[3][3][4] = 5;
-        world[3][4][4] = 5;
-        world[3][5][4] = 5;*/
 
 
         for(i = 0; i < MAX_PROJECTILES; i++){
@@ -1692,10 +1699,17 @@ void SetupWall(Wall **targetWall, Wall **adjacentWall, GenerationInfo *genInfo){
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+/////
+///// Mobs 
+/////
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /////
-///// Utility Functions ========================================================
+///// Utility Functions 
 /////
 
 
