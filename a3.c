@@ -1704,7 +1704,21 @@ void SetupWall(Wall **targetWall, Wall **adjacentWall, GenerationInfo *genInfo){
 ///// Mobs 
 /////
 
+//Need a global var to track:
+// - animation state of each mob
+// - position of each mob
+// - target location of each mob
 
+
+// need functions:
+// - draw the mob
+// - erase the mob
+// - move teh mob?
+// - decide where the mob should going
+// - check if a wall is in the way?
+// - check if the mob sees a player
+// - check if the mob is being seen by the player?
+// - time how long since last animation transition and transition each mob to new animation frame
 
 
 ////////////////////////////////////////////////////////////////////////////////
