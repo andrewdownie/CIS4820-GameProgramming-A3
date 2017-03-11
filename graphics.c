@@ -65,6 +65,8 @@ int netServer = 0;		// network server flag, is server when = 1
 int displayList[MAX_DISPLAY_LIST][3];
 int displayCount = 0;		// count of cubes in displayList[][]
 
+int MobVisible(int startX, int endX, int startZ, int endZ);
+
 /* list of mobs - number of mobs, xyz values and rotation about y */
 float mobPosition[MOB_COUNT][4];
 /* visibility of mobs, 0 not drawn, 1 drawn */
@@ -88,6 +90,21 @@ void  set2Dcolour(float []);
 
 /***************/
 
+
+int MobVisible(int startX, int endX, int startZ, int endZ){
+    int i, x, z;
+    
+    for(i = 0; i < displayCount; i++){
+        x = displayList[i][0];
+        z = displayList[i][2];
+        
+        if(x >= startX && x <= endX && z >= startZ && z <= endZ){
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 
 /* player control functions */

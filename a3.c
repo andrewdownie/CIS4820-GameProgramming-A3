@@ -782,6 +782,11 @@ void update() {
             }
         }
 
+        ///
+        /// Check if we can see the mob
+        ///
+        int visible = MobVisible(10, 12, 10, 12);
+        printf("Mob is visible %d\n", visible);
 
 
         lastUpdateTime = glutGet(GLUT_ELAPSED_TIME);
