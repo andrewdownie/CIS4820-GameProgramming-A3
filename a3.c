@@ -1009,32 +1009,32 @@ int main(int argc, char** argv)
         /// Setup the mobs
         ///
         mobs[0].type = 0;
-        mobs[0].startX = 1;
-        mobs[0].startZ = 1;
+        mobs[0].startX = 8;
+        mobs[0].startZ = 8;
         mobs[0].endX = 3;
         mobs[0].endZ = 3;
         mobs[0].frame = 0;
         mobs[0].projectileIndex = MAX_PROJECTILES;
 
         mobs[1].type = 0;
-        mobs[1].startX = 8;
-        mobs[1].startZ = 1;
+        mobs[1].startX = 32;
+        mobs[1].startZ = 2;
         mobs[1].endX = 3;
         mobs[1].endZ = 3;
         mobs[1].frame = 0;
         mobs[1].projectileIndex = MAX_PROJECTILES + 1;
 
         mobs[2].type = 1;
-        mobs[2].startX = 1;
-        mobs[2].startZ = 8;
+        mobs[2].startX = 2;
+        mobs[2].startZ = 32;
         mobs[2].endX = 3;
         mobs[2].endZ = 3;
         mobs[2].frame = 0;
         mobs[2].projectileIndex = MAX_PROJECTILES + 2;
 
         mobs[3].type = 1;
-        mobs[3].startX = 15;
-        mobs[3].startZ = 15;
+        mobs[3].startX = 32;
+        mobs[3].startZ = 32;
         mobs[3].endX = 3;
         mobs[3].endZ = 3;
         mobs[3].frame = 0;
