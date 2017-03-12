@@ -1100,17 +1100,21 @@ void MoveMob(Mob *mob){
     if(mob->startX >= 8){
         for(height = 0; height < WALL_HEIGHT; height++){
             for(i = 0; i < 3; i++){
-                if(world[mob->startX][height + 1][i] != 0){
+                if(world[mob->startX - 2][height + 1][i + mob->startZ] != 0){
                     randMove[0] = 0;
 
-                    //TODO: for testing
-                    mob->endX = mob->startX - 6;
+                   // mob->endX = mob->startX - 6;
                 }
             }
         }
     }
+    else{
+        randMove[0] = 0;
+    }
 
-
+    if(randMove[0] == 1){
+        mob->endX = mob->startX - 6;
+    }
 }
 
 
