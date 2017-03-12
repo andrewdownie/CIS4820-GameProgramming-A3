@@ -1102,11 +1102,11 @@ void MobShoot(int ID){
     mobProjectiles[ID].moveY = moveY * PROJECTILE_MOVE_SPEED;
     mobProjectiles[ID].moveZ = moveZ * PROJECTILE_MOVE_SPEED; 
 
-    mobProjectiles[ID].x = playerX + 0.5f - moveX * PROJECTILE_SPAWN_DISTANCE;
-    mobProjectiles[ID].y = playerY + 0.5f - moveY * PROJECTILE_SPAWN_DISTANCE;
-    mobProjectiles[ID].z = playerZ + 0.5f - moveZ * PROJECTILE_SPAWN_DISTANCE;
+    mobProjectiles[ID].x = -mobs[ID].startX - 1;
+    mobProjectiles[ID].y = -MOB_HEIGHT - 1;
+    mobProjectiles[ID].z = -mobs[ID].startZ - 1;
 
-    setMobPosition(mobID, projectiles[projectileInsert].x * -1, projectiles[projectileInsert].y * -1, projectiles[projectileInsert].z * -1, 0);
+    setMobPosition(ID + MAX_PROJECTILES, mobProjectiles[ID].x * -1, mobProjectiles[ID].y * -1, mobProjectiles[ID].z * -1, 0);
     showMob(ID + MAX_PROJECTILES);
 
     projectileInsert++;
