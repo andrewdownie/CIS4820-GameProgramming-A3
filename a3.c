@@ -598,6 +598,9 @@ void draw2D() {
             else if(world[x][1][z] == 5){
                 set2Dcolour(white);
             }
+            else if(world[x][1][z] == MOB_COLOR){
+                set2Dcolour(yellow);
+            }
             else{
                 set2Dcolour(red);
             }
@@ -1032,8 +1035,8 @@ int main(int argc, char** argv)
         mobs[2].projectileIndex = MAX_PROJECTILES;
 
         mobs[3].type = 1;
-        mobs[3].startX = 8;
-        mobs[3].startZ = 8;
+        mobs[3].startX = 15;
+        mobs[3].startZ = 15;
         mobs[3].endX = 3;
         mobs[3].endZ = 3;
         mobs[3].frame = 0;
@@ -1140,10 +1143,10 @@ void MobShoot(int ID){
     /*moveX =;
     moveY = 
     moveZ =*/
-    printf("start x is %d\n", mobs[ID].startX);
-    mobProjectiles[ID].moveX = (mobs[ID].startX - playerX) / 10;
-    mobProjectiles[ID].moveY = (playerY - MOB_HEIGHT + 2) / 10; 
-    mobProjectiles[ID].moveZ = (mobs[ID].startZ - playerZ) / 10;
+    //printf("start x is %d\n", mobs[ID].startX);
+    mobProjectiles[ID].moveX = (mobs[ID].startX - playerX) / 5;
+    mobProjectiles[ID].moveY = (playerY - MOB_HEIGHT + 2) / 5; 
+    mobProjectiles[ID].moveZ = (mobs[ID].startZ - playerZ) / 5;
 
     /*mobProjectiles[ID].moveX = 1; 
     mobProjectiles[ID].moveY = 1;
@@ -1158,21 +1161,6 @@ void MobShoot(int ID){
 
 
 }
-//Need a global var to track:
-// - animation state of each mob
-// - position of each mob
-// - target location of each mob
-
-
-// need functions:
-// - draw the mob
-// - erase the mob
-// - move teh mob?
-// - decide where the mob should going
-// - check if a wall is in the way?
-// - check if the mob sees a player
-// - check if the mob is being seen by the player?
-// - time how long since last animation transition and transition each mob to new animation frame
 
 
 ////////////////////////////////////////////////////////////////////////////////
