@@ -796,7 +796,50 @@ void update() {
         ///
         /// Move mob projectiles
         ///
-        //TODO: this
+        for(i = 0; i < MOB_COUNT; i++){
+            if(mobProjectiles[i].enabled){
+                deltaX = mobProjectiles[i].moveX * deltaTime / 1000;
+                deltaY = mobProjectiles[i].moveY * deltaTime / 1000;
+                deltaZ = mobProjectiles[i].moveZ * deltaTime / 1000; 
+                curX = mobProjectiles[i].x - deltaX;
+                curY = mobProjectiles[i].y - deltaY;
+                curZ = mobProjectiles[i].z - deltaZ;
+                mobID = mobProjectiles[i].mobID;
+
+                mobProjectiles[i].x = curX;
+                mobProjectiles[i].y = curY;
+                mobProjectiles[i].z = curZ;
+                
+
+
+                setMobPosition(mobID + MAX_PROJECTILES, mobProjectiles[i].x * -1, mobProjectiles[i].y * - 1, mobProjectiles[i].z * -1, 0);
+
+                mobProjectiles[i].timeEnabled += deltaTime;
+
+                if(mobProjectiles[i].timeEnabled >= PROJECTILE_LIFE_MILI){
+                    mobProjectiles[i].enabled = 0;
+                    hideMob(mobID + MAX_PROJECTILES);
+                }
+
+                
+               intX = (int)(curX * -1 + 0.5f);
+               intY = (int)(curY * -1 + 0.5f);
+               intZ = (int)(curZ * -1 + 0.5f); 
+               if(intX >= 0 && intX < WORLDX && intY >= 0 && intY < WORLDY && intZ >= 0 && intZ < WORLDZ){
+                if(world[intX][intY][intZ] != EMPTY_PIECE){
+                    mobProjectiles[i].enabled = 0;
+                    hideMob(mobID + MAX_PROJECTILES);
+                    if(world[intX][intY][intZ] == INNER_WALL_COLOUR){
+
+                        world[intX][intY][intZ] = 0;
+                    }
+                }
+               }
+
+
+                
+            }
+        }
 
         ///
         /// Check if we can see the mob
@@ -1095,12 +1138,18 @@ void MobShoot(int ID){
     mobProjectiles[projectileInsert].enabled = 1;
     mobProjectiles[projectileInsert].timeEnabled = 0;
 
+
+    //TODO: make the projectile move towards the players current position
     moveX = cos((rotY - 90) * 0.0174533f);
     moveY = -sin((rotX) * 0.0174533f);
     moveZ = sin((rotY - 90) * 0.0174533f);
     mobProjectiles[ID].moveX = moveX * PROJECTILE_MOVE_SPEED;
     mobProjectiles[ID].moveY = moveY * PROJECTILE_MOVE_SPEED;
     mobProjectiles[ID].moveZ = moveZ * PROJECTILE_MOVE_SPEED; 
+
+    mobProjectiles[ID].moveX = 1; 
+    mobProjectiles[ID].moveY = 1;
+    mobProjectiles[ID].moveZ = 1; 
 
     mobProjectiles[ID].x = -mobs[ID].startX - 1;
     mobProjectiles[ID].y = -MOB_HEIGHT - 1;
