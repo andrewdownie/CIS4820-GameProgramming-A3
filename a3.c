@@ -1072,6 +1072,7 @@ void MoveMob(Mob *mob){
 
     //Left, right, up, down
     int randMove[4] = {1, 1, 1, 1};
+    int randDir = rand() % 4;
 
     ///
     /// Move the mob
@@ -1151,6 +1152,22 @@ void MoveMob(Mob *mob){
     else{
         randMove[3] = 0;
     }
+
+
+
+    if(randMove[0] == 1 && randDir == 0){
+        mob->endX = mob->startX - 6;
+    }
+    else if(randMove[1] == 1 && randDir <= 1){
+        mob->endX = mob->startX + 6;
+    }
+    else if(randMove[2] == 1 && randDir <= 2){
+        mob->endZ = mob->startZ - 6;
+    }
+    else if(randMove[3] == 1 && randDir <= 3){
+        mob->endZ = mob->startZ + 6;
+    }
+
 
     if(randMove[0] == 1){
         mob->endX = mob->startX - 6;
