@@ -172,7 +172,7 @@ int CIRCLER_ANIMATION[CIRCLER_FRAME_COUNT][MOB_PIXEL_COUNT] = {
     }
 
 };
-
+void MoveMob(Mob *mob);
 void EraseMob(Mob *mob);
 void DrawMob(Mob *mob);
 void MobShoot(int projectileID);
@@ -856,13 +856,14 @@ void update() {
             for(i = 0; i < MOB_COUNT; i++){
                 EraseMob(&(mobs[i]));
                 mobs[i].frame++;
-                //mobs[i].startX = mobs[i].startX + 1; // call movement function here
                 if(mobs[i].frame >= XER_FRAME_COUNT){
                     mobs[i].frame = 0;
 
                     // SHOOT
                     MobShoot(i);
                 }
+
+                MoveMob(&(mobs[i]));
                 
                 DrawMob(&(mobs[i]));
             }
@@ -1011,32 +1012,32 @@ int main(int argc, char** argv)
         mobs[0].type = 0;
         mobs[0].startX = 8;
         mobs[0].startZ = 8;
-        mobs[0].endX = 3;
-        mobs[0].endZ = 3;
+        mobs[0].endX = 8;
+        mobs[0].endZ = 8;
         mobs[0].frame = 0;
         mobs[0].projectileIndex = MAX_PROJECTILES;
 
         mobs[1].type = 0;
         mobs[1].startX = 32;
         mobs[1].startZ = 2;
-        mobs[1].endX = 3;
-        mobs[1].endZ = 3;
+        mobs[1].endX = 32;
+        mobs[1].endZ = 2;
         mobs[1].frame = 0;
         mobs[1].projectileIndex = MAX_PROJECTILES + 1;
 
         mobs[2].type = 1;
         mobs[2].startX = 2;
         mobs[2].startZ = 32;
-        mobs[2].endX = 3;
-        mobs[2].endZ = 3;
+        mobs[2].endX = 2;
+        mobs[2].endZ = 32;
         mobs[2].frame = 0;
         mobs[2].projectileIndex = MAX_PROJECTILES + 2;
 
         mobs[3].type = 1;
         mobs[3].startX = 32;
         mobs[3].startZ = 32;
-        mobs[3].endX = 3;
-        mobs[3].endZ = 3;
+        mobs[3].endX = 32;
+        mobs[3].endZ = 32;
         mobs[3].frame = 0;
         mobs[3].projectileIndex = MAX_PROJECTILES + 3;
 
@@ -1065,6 +1066,56 @@ int main(int argc, char** argv)
 /////
 ///// Mobs 
 /////
+void MoveMob(Mob *mob){
+    int i = 0;
+    int height = 0;
+
+    //Left, right, up, down
+    int randMove[4] = {1, 1, 1, 1};
+
+    ///
+    /// Move the mob
+    ///
+    if(mob->endX > mob->startX){
+        mob->startX++;
+    } 
+    else if(mob->endX < mob->startX){
+        mob->startX--;
+    }
+    else if(mob->endZ > mob->startZ){
+        mob->startZ++;
+    }
+    else if(mob->endZ < mob->startZ){
+        mob->startZ--;
+    }
+
+    ///
+    /// Pick a new destination
+    ///
+    if(mob->startX != mob->endX || mob->startZ != mob->endZ){
+        return;
+    }
+
+    //Left move
+    if(mob->startX >= 8){
+        for(height = 0; height < WALL_HEIGHT; height++){
+            for(i = 0; i < 3; i++){
+                if(world[mob->startX][height + 1][i] != 0){
+                    randMove[0] = 0;
+
+                    //TODO: for testing
+                    mob->endX = mob->startX - 6;
+                }
+            }
+        }
+    }
+
+
+}
+
+
+
+
 void EraseMob(Mob *mob){
     int x, z, y;
     int *frame;
