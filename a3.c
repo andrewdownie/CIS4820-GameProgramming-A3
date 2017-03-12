@@ -813,7 +813,6 @@ void update() {
 
 
                 setMobPosition(i + MAX_PROJECTILES, mobProjectiles[i].x * -1, mobProjectiles[i].y * - 1, mobProjectiles[i].z * -1, 0);
-                printf("Move mob projectiles to: %f %f %f\n", mobProjectiles[i].x * -1, mobProjectiles[i].y * -1, mobProjectiles[i].z * -1);
 
                 mobProjectiles[i].timeEnabled += deltaTime;
 
@@ -1142,13 +1141,13 @@ void MobShoot(int ID){
     /*moveX =;
     moveY = 
     moveZ =*/
-    mobProjectiles[ID].moveX = moveX * PROJECTILE_MOVE_SPEED;
-    mobProjectiles[ID].moveY = moveY * PROJECTILE_MOVE_SPEED;
-    mobProjectiles[ID].moveZ = moveZ * PROJECTILE_MOVE_SPEED; 
+    mobProjectiles[ID].moveX = (playerX - mobs[i].startX + 1) / 10;
+    mobProjectiles[ID].moveY = (playerY - MOB_HEIGHT + 2) / 10; 
+    mobProjectiles[ID].moveZ = (playerZ - mobs[i].startZ + 1) / 10;
 
-    mobProjectiles[ID].moveX = 1; 
+    /*mobProjectiles[ID].moveX = 1; 
     mobProjectiles[ID].moveY = 1;
-    mobProjectiles[ID].moveZ = 1; 
+    mobProjectiles[ID].moveZ = 1;*/ 
 
     mobProjectiles[ID].x = -mobs[ID].startX - 1;
     mobProjectiles[ID].y = -MOB_HEIGHT - 1;
