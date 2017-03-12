@@ -1102,8 +1102,6 @@ void MoveMob(Mob *mob){
             for(i = 0; i < 3; i++){
                 if(world[mob->startX - 2][height + 1][i + mob->startZ] != 0){
                     randMove[0] = 0;
-
-                   // mob->endX = mob->startX - 6;
                 }
             }
         }
@@ -1112,8 +1110,59 @@ void MoveMob(Mob *mob){
         randMove[0] = 0;
     }
 
+    //Right move
+    if(mob->startX <= 26){
+        for(height = 0; height < WALL_HEIGHT; height++){
+            for(i = 0; i < 3; i++){
+                if(world[mob->startX + 4][height + 1][i + mob->startZ] != 0){
+                    randMove[1] = 0;
+                }
+            }
+        }
+    }
+    else{
+        randMove[1] = 0;
+    }
+
+    //Up move
+    if(mob->startZ >= 8){
+        for(height = 0; height < WALL_HEIGHT; height++){
+            for(i = 0; i < 3; i++){
+                if(world[mob->startX + i][height + 1][mob->startZ - 2] != 0){
+                    randMove[2] = 0;
+                }
+            }
+        }
+    }
+    else{
+        randMove[2] = 0;
+    }
+
+    //Down move
+    if(mob->startZ <= 26){
+        for(height = 0; height < WALL_HEIGHT; height++){
+            for(i = 0; i < 3; i++){
+                if(world[mob->startX + i][height + 1][mob->startZ + 4] != 0){
+                    randMove[3] = 0;
+                }
+            }
+        }
+    }
+    else{
+        randMove[3] = 0;
+    }
+
     if(randMove[0] == 1){
         mob->endX = mob->startX - 6;
+    }
+    else if(randMove[1] == 1){
+        mob->endX = mob->startX + 6;
+    }
+    else if(randMove[2] == 1){
+        mob->endZ = mob->startZ - 6;
+    }
+    else if(randMove[3] == 1){
+        mob->endZ = mob->startZ + 6;
     }
 }
 
