@@ -64,3 +64,13 @@ typedef struct _Projectile{
     float y;
     float z;
 } Projectile;
+
+typedef struct _Mob{
+    int startX;
+    int endX;
+    int startZ;
+    int endZ;
+    int frame;
+    int projectileIndex;
+    int type;
+} Mob;

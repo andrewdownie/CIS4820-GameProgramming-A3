@@ -112,7 +112,14 @@ Pillar pillars[WALL_COUNT_X - 1][WALL_COUNT_Z - 1];
 ///
 /// Mobs
 ///
+#define MOB_COUNT 4
 #define MOB_PIXEL_COUNT 9
+#define MOB_HEIGHT 3
+#define MOB_COLOR 6
+#define MOB_FRAME_TIME 300 
+
+Mob mobs[MOB_COUNT];
+int mobFrameTimePassed;
 
 /// MOB: X-ER
 #define XER_FRAME_COUNT 4
@@ -165,7 +172,8 @@ int CIRCLER_ANIMATION[CIRCLER_FRAME_COUNT][MOB_PIXEL_COUNT] = {
 
 };
 
-
+void EraseMob(Mob *mob);
+void DrawMob(Mob *mob);
 
 ///
 /// Wall and floor manipulation forward declarations ------
@@ -786,7 +794,28 @@ void update() {
         /// Check if we can see the mob
         ///
         int visible = MobVisible(10, 12, 10, 12);
-        printf("Mob is visible %d\n", visible);
+        //printf("Mob is visible %d\n", visible);
+
+
+
+
+        mobFrameTimePassed += glutGet(GLUT_ELAPSED_TIME) - lastUpdateTime;
+        printf("%d\n", mobFrameTimePassed);
+        if(mobFrameTimePassed > MOB_FRAME_TIME){
+            EraseMob(&(mobs[0]));
+            for(i = 0; i < MOB_COUNT; i++){
+                mobs[i].frame++;
+                if(mobs[i].frame >= XER_FRAME_COUNT){
+                    mobs[i].frame = 0;
+                }
+            }
+
+            DrawMob(&(mobs[0]));
+
+
+            mobFrameTimePassed = 0;
+        }
+
 
 
         lastUpdateTime = glutGet(GLUT_ELAPSED_TIME);
@@ -893,6 +922,8 @@ int main(int argc, char** argv)
         MAP_SIZE_X = (WALL_COUNT_X * WALL_LENGTH) + WALL_COUNT_X + 2;
         MAP_SIZE_Z = (WALL_COUNT_Z * WALL_LENGTH) + WALL_COUNT_Z + 2;
 
+        
+
 
         ///
         /// Build the initial world
@@ -904,12 +935,57 @@ int main(int argc, char** argv)
         printf("Wall count: %d\n", CountAllWalls());
 
 
-
+        ///
+        /// Create the player projectiles
         for(i = 0; i < MAX_PROJECTILES; i++){
             createMob(i, i, 5.0, 1.0, 0.0);
             hideMob(i);
             projectiles[i].mobID = i;
         }
+
+        ///
+        /// Setup the mobs
+        ///
+        mobs[0].type = 0;
+        mobs[0].startX = 1;
+        mobs[0].startZ = 1;
+        mobs[0].endX = 3;
+        mobs[0].endZ = 3;
+        mobs[0].frame = 0;
+        mobs[0].projectileIndex = MAX_PROJECTILES;
+
+        mobs[1].type = 0;
+        mobs[1].startX = 1;
+        mobs[1].startZ = 1;
+        mobs[1].endX = 3;
+        mobs[1].endZ = 3;
+        mobs[1].frame = 0;
+        mobs[1].projectileIndex = MAX_PROJECTILES;
+
+        mobs[2].type = 0;
+        mobs[2].startX = 1;
+        mobs[2].startZ = 1;
+        mobs[2].endX = 3;
+        mobs[2].endZ = 3;
+        mobs[2].frame = 0;
+        mobs[2].projectileIndex = MAX_PROJECTILES;
+
+        mobs[3].type = 0;
+        mobs[3].startX = 1;
+        mobs[3].startZ = 1;
+        mobs[3].endX = 3;
+        mobs[3].endZ = 3;
+        mobs[3].frame = 0;
+        mobs[3].projectileIndex = MAX_PROJECTILES;
+
+        mobFrameTimePassed = 0;
+        ///
+        /// Create the mobs
+        ///
+        for(i = 0; i < MOB_COUNT; i++){
+            DrawMob(&(mobs[i]));
+        } 
+
 
     }
 
@@ -923,6 +999,76 @@ int main(int argc, char** argv)
     return 0;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+/////
+///// Mobs 
+/////
+void EraseMob(Mob *mob){
+    int x, z, y;
+    int *frame;
+
+    if(mob->type == 0){
+        frame = XER_ANIMATION[mob->frame];
+    }
+    else{
+        frame = CIRCLER_ANIMATION[mob->frame];
+    }
+
+    for(x = 0; x < 3; x++){
+        for(z = 0; z < 3; z++){
+            for(y = 0; y < MOB_HEIGHT; y++){
+
+                if(frame[x + z * 3] == 1){
+                    world[mob->startX + x][1 + y][mob->startZ + z] = 0;
+                }            
+
+            }
+        }
+    }
+
+}
+
+
+void DrawMob(Mob *mob){
+    int x, z, y;
+    int *frame;
+
+    if(mob->type == 0){
+        frame = XER_ANIMATION[mob->frame];
+    }
+    else{
+        frame = CIRCLER_ANIMATION[mob->frame];
+    }
+
+    for(x = 0; x < 3; x++){
+        for(z = 0; z < 3; z++){
+            for(y = 0; y < MOB_HEIGHT; y++){
+
+                if(frame[x + z * 3] == 1){
+                    world[mob->startX + x][1 + y][mob->startZ + z] = MOB_COLOR;
+                }            
+
+            }
+        }
+    }
+
+}
+
+//Need a global var to track:
+// - animation state of each mob
+// - position of each mob
+// - target location of each mob
+
+
+// need functions:
+// - draw the mob
+// - erase the mob
+// - move teh mob?
+// - decide where the mob should going
+// - check if a wall is in the way?
+// - check if the mob sees a player
+// - check if the mob is being seen by the player?
+// - time how long since last animation transition and transition each mob to new animation frame
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1704,26 +1850,7 @@ void SetupWall(Wall **targetWall, Wall **adjacentWall, GenerationInfo *genInfo){
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-/////
-///// Mobs 
-/////
 
-//Need a global var to track:
-// - animation state of each mob
-// - position of each mob
-// - target location of each mob
-
-
-// need functions:
-// - draw the mob
-// - erase the mob
-// - move teh mob?
-// - decide where the mob should going
-// - check if a wall is in the way?
-// - check if the mob sees a player
-// - check if the mob is being seen by the player?
-// - time how long since last animation transition and transition each mob to new animation frame
 
 
 ////////////////////////////////////////////////////////////////////////////////
