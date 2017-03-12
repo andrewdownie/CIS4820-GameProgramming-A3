@@ -855,8 +855,8 @@ void update() {
 
         mobFrameTimePassed += glutGet(GLUT_ELAPSED_TIME) - lastUpdateTime;
         if(mobFrameTimePassed > MOB_FRAME_TIME){
-            EraseMob(&(mobs[0]));
             for(i = 0; i < MOB_COUNT; i++){
+                EraseMob(&(mobs[i]));
                 mobs[i].frame++;
                 if(mobs[i].frame >= XER_FRAME_COUNT){
                     mobs[i].frame = 0;
@@ -865,9 +865,9 @@ void update() {
                     MobShoot(i);
                 }
                 
+                DrawMob(&(mobs[i]));
             }
 
-            DrawMob(&(mobs[0]));
 
 
             mobFrameTimePassed = 0;
@@ -1018,24 +1018,24 @@ int main(int argc, char** argv)
         mobs[0].projectileIndex = MAX_PROJECTILES;
 
         mobs[1].type = 0;
-        mobs[1].startX = 1;
+        mobs[1].startX = 8;
         mobs[1].startZ = 1;
         mobs[1].endX = 3;
         mobs[1].endZ = 3;
         mobs[1].frame = 0;
         mobs[1].projectileIndex = MAX_PROJECTILES;
 
-        mobs[2].type = 0;
+        mobs[2].type = 1;
         mobs[2].startX = 1;
-        mobs[2].startZ = 1;
+        mobs[2].startZ = 8;
         mobs[2].endX = 3;
         mobs[2].endZ = 3;
         mobs[2].frame = 0;
         mobs[2].projectileIndex = MAX_PROJECTILES;
 
-        mobs[3].type = 0;
-        mobs[3].startX = 1;
-        mobs[3].startZ = 1;
+        mobs[3].type = 1;
+        mobs[3].startX = 8;
+        mobs[3].startZ = 8;
         mobs[3].endX = 3;
         mobs[3].endZ = 3;
         mobs[3].frame = 0;
@@ -1139,16 +1139,16 @@ void MobShoot(int ID){
 
 
     //TODO: make the projectile move towards the players current position
-    moveX = cos((rotY - 90) * 0.0174533f);
-    moveY = -sin((rotX) * 0.0174533f);
-    moveZ = sin((rotY - 90) * 0.0174533f);
+    /*moveX =;
+    moveY = 
+    moveZ =*/
     mobProjectiles[ID].moveX = moveX * PROJECTILE_MOVE_SPEED;
     mobProjectiles[ID].moveY = moveY * PROJECTILE_MOVE_SPEED;
     mobProjectiles[ID].moveZ = moveZ * PROJECTILE_MOVE_SPEED; 
 
-    mobProjectiles[ID].moveX = 10; 
-    mobProjectiles[ID].moveY = 10;
-    mobProjectiles[ID].moveZ = 10; 
+    mobProjectiles[ID].moveX = 1; 
+    mobProjectiles[ID].moveY = 1;
+    mobProjectiles[ID].moveZ = 1; 
 
     mobProjectiles[ID].x = -mobs[ID].startX - 1;
     mobProjectiles[ID].y = -MOB_HEIGHT - 1;
