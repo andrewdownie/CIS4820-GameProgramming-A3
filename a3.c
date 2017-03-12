@@ -96,7 +96,7 @@ int lastUpdateTime;
 ///
 #define PROJECTILE_SPAWN_DISTANCE 0.2f 
 #define PROJECTILE_MOVE_SPEED 5.0f
-#define PROJECTILE_LIFE_MILI 10000
+#define PROJECTILE_LIFE_MILI 6000
 #define MAX_PROJECTILES 3 
 void Shoot();
 Projectile projectiles[MAX_PROJECTILES];
@@ -595,9 +595,6 @@ void draw2D() {
             else if(world[x][1][z] == PILLAR_COLOUR){
                 set2Dcolour(blue);
             }
-            else if(world[x][1][z] == 5){
-                set2Dcolour(white);
-            }
             else if(world[x][1][z] == MOB_COLOR){
                 set2Dcolour(yellow);
             }
@@ -859,6 +856,7 @@ void update() {
             for(i = 0; i < MOB_COUNT; i++){
                 EraseMob(&(mobs[i]));
                 mobs[i].frame++;
+                //mobs[i].startX = mobs[i].startX + 1; // call movement function here
                 if(mobs[i].frame >= XER_FRAME_COUNT){
                     mobs[i].frame = 0;
 
@@ -1024,7 +1022,7 @@ int main(int argc, char** argv)
         mobs[1].endX = 3;
         mobs[1].endZ = 3;
         mobs[1].frame = 0;
-        mobs[1].projectileIndex = MAX_PROJECTILES;
+        mobs[1].projectileIndex = MAX_PROJECTILES + 1;
 
         mobs[2].type = 1;
         mobs[2].startX = 1;
@@ -1032,7 +1030,7 @@ int main(int argc, char** argv)
         mobs[2].endX = 3;
         mobs[2].endZ = 3;
         mobs[2].frame = 0;
-        mobs[2].projectileIndex = MAX_PROJECTILES;
+        mobs[2].projectileIndex = MAX_PROJECTILES + 2;
 
         mobs[3].type = 1;
         mobs[3].startX = 15;
@@ -1040,7 +1038,7 @@ int main(int argc, char** argv)
         mobs[3].endX = 3;
         mobs[3].endZ = 3;
         mobs[3].frame = 0;
-        mobs[3].projectileIndex = MAX_PROJECTILES;
+        mobs[3].projectileIndex = MAX_PROJECTILES + 3;
 
         mobFrameTimePassed = 0;
         ///
@@ -1147,6 +1145,9 @@ void MobShoot(int ID){
     mobProjectiles[ID].moveX = (mobs[ID].startX - playerX) / 5;
     mobProjectiles[ID].moveY = (playerY - MOB_HEIGHT + 2) / 5; 
     mobProjectiles[ID].moveZ = (mobs[ID].startZ - playerZ) / 5;
+
+    printf("move x, move z %f %f\n", mobProjectiles[ID].moveX, mobProjectiles[ID].moveZ);
+
 
     /*mobProjectiles[ID].moveX = 1; 
     mobProjectiles[ID].moveY = 1;
