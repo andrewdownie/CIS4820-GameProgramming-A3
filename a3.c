@@ -96,7 +96,7 @@ int lastUpdateTime;
 ///
 #define PROJECTILE_SPAWN_DISTANCE 0.2f 
 #define PROJECTILE_MOVE_SPEED 5.0f
-#define PROJECTILE_LIFE_MILI 5000
+#define PROJECTILE_LIFE_MILI 10000
 #define MAX_PROJECTILES 3 
 void Shoot();
 Projectile projectiles[MAX_PROJECTILES];
@@ -796,7 +796,6 @@ void update() {
         /// Move mob projectiles
         ///
         for(i = 0; i < MOB_COUNT; i++){
-            printf("enabled = %d\n", mobProjectiles[i].enabled);
             if(mobProjectiles[i].enabled){
                 deltaX = mobProjectiles[i].moveX * deltaTime / 1000;
                 deltaY = mobProjectiles[i].moveY * deltaTime / 1000;
@@ -1141,9 +1140,10 @@ void MobShoot(int ID){
     /*moveX =;
     moveY = 
     moveZ =*/
-    mobProjectiles[ID].moveX = (playerX - mobs[i].startX + 1) / 10;
+    printf("start x is %d\n", mobs[ID].startX);
+    mobProjectiles[ID].moveX = (mobs[ID].startX - playerX) / 10;
     mobProjectiles[ID].moveY = (playerY - MOB_HEIGHT + 2) / 10; 
-    mobProjectiles[ID].moveZ = (playerZ - mobs[i].startZ + 1) / 10;
+    mobProjectiles[ID].moveZ = (mobs[ID].startZ - playerZ) / 10;
 
     /*mobProjectiles[ID].moveX = 1; 
     mobProjectiles[ID].moveY = 1;
