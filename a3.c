@@ -792,11 +792,11 @@ void update() {
             }
         }
 
-
         ///
         /// Move mob projectiles
         ///
         for(i = 0; i < MOB_COUNT; i++){
+            printf("enabled = %d\n", mobProjectiles[i].enabled);
             if(mobProjectiles[i].enabled){
                 deltaX = mobProjectiles[i].moveX * deltaTime / 1000;
                 deltaY = mobProjectiles[i].moveY * deltaTime / 1000;
@@ -812,7 +812,8 @@ void update() {
                 
 
 
-                setMobPosition(mobID + MAX_PROJECTILES, mobProjectiles[i].x * -1, mobProjectiles[i].y * - 1, mobProjectiles[i].z * -1, 0);
+                setMobPosition(i + MAX_PROJECTILES, mobProjectiles[i].x * -1, mobProjectiles[i].y * - 1, mobProjectiles[i].z * -1, 0);
+                printf("Move mob projectiles to: %f %f %f\n", mobProjectiles[i].x * -1, mobProjectiles[i].y * -1, mobProjectiles[i].z * -1);
 
                 mobProjectiles[i].timeEnabled += deltaTime;
 
@@ -828,7 +829,7 @@ void update() {
                if(intX >= 0 && intX < WORLDX && intY >= 0 && intY < WORLDY && intZ >= 0 && intZ < WORLDZ){
                 if(world[intX][intY][intZ] != EMPTY_PIECE){
                     mobProjectiles[i].enabled = 0;
-                    hideMob(mobID + MAX_PROJECTILES);
+                    hideMob(i + MAX_PROJECTILES);
                     if(world[intX][intY][intZ] == INNER_WALL_COLOUR){
 
                         world[intX][intY][intZ] = 0;
@@ -1117,11 +1118,9 @@ void DrawMob(Mob *mob){
 }
 
 void MobShoot(int ID){
-    printf("Shoot projectileID %d\n", ID);
     float playerX, playerY, playerZ;
     float rotX, rotY, rotZ;
 
-    int projectileInsert = -1;
     int i;
 
     //float mobX, mobZ;
@@ -1135,8 +1134,8 @@ void MobShoot(int ID){
         return;
     }    
 
-    mobProjectiles[projectileInsert].enabled = 1;
-    mobProjectiles[projectileInsert].timeEnabled = 0;
+    mobProjectiles[ID].enabled = 1;
+    mobProjectiles[ID].timeEnabled = 0;
 
 
     //TODO: make the projectile move towards the players current position
@@ -1147,9 +1146,9 @@ void MobShoot(int ID){
     mobProjectiles[ID].moveY = moveY * PROJECTILE_MOVE_SPEED;
     mobProjectiles[ID].moveZ = moveZ * PROJECTILE_MOVE_SPEED; 
 
-    mobProjectiles[ID].moveX = 1; 
-    mobProjectiles[ID].moveY = 1;
-    mobProjectiles[ID].moveZ = 1; 
+    mobProjectiles[ID].moveX = 10; 
+    mobProjectiles[ID].moveY = 10;
+    mobProjectiles[ID].moveZ = 10; 
 
     mobProjectiles[ID].x = -mobs[ID].startX - 1;
     mobProjectiles[ID].y = -MOB_HEIGHT - 1;
@@ -1158,7 +1157,6 @@ void MobShoot(int ID){
     setMobPosition(ID + MAX_PROJECTILES, mobProjectiles[ID].x * -1, mobProjectiles[ID].y * -1, mobProjectiles[ID].z * -1, 0);
     showMob(ID + MAX_PROJECTILES);
 
-    projectileInsert++;
 
 }
 //Need a global var to track:
