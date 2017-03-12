@@ -114,9 +114,10 @@ Pillar pillars[WALL_COUNT_X - 1][WALL_COUNT_Z - 1];
 ///
 #define MOB_COUNT 4
 #define MOB_PIXEL_COUNT 9
-#define MOB_HEIGHT 3
+#define MOB_HEIGHT 4
 #define MOB_COLOR 6
 #define MOB_FRAME_TIME 300 
+Projectile mobProjectiles[MOB_COUNT];
 
 Mob mobs[MOB_COUNT];
 int mobFrameTimePassed;
@@ -174,6 +175,7 @@ int CIRCLER_ANIMATION[CIRCLER_FRAME_COUNT][MOB_PIXEL_COUNT] = {
 
 void EraseMob(Mob *mob);
 void DrawMob(Mob *mob);
+void MobShoot(int projectileID);
 
 ///
 /// Wall and floor manipulation forward declarations ------
@@ -790,24 +792,35 @@ void update() {
             }
         }
 
+
+        ///
+        /// Move mob projectiles
+        ///
+        //TODO: this
+
         ///
         /// Check if we can see the mob
         ///
         int visible = MobVisible(10, 12, 10, 12);
+        // if we can see the mob, they should run away from us.
+        // otherwise they should move randomly i think
         //printf("Mob is visible %d\n", visible);
 
 
 
 
         mobFrameTimePassed += glutGet(GLUT_ELAPSED_TIME) - lastUpdateTime;
-        printf("%d\n", mobFrameTimePassed);
         if(mobFrameTimePassed > MOB_FRAME_TIME){
             EraseMob(&(mobs[0]));
             for(i = 0; i < MOB_COUNT; i++){
                 mobs[i].frame++;
                 if(mobs[i].frame >= XER_FRAME_COUNT){
                     mobs[i].frame = 0;
+
+                    // SHOOT
+                    MobShoot(i);
                 }
+                
             }
 
             DrawMob(&(mobs[0]));
@@ -943,6 +956,12 @@ int main(int argc, char** argv)
             projectiles[i].mobID = i;
         }
 
+        for(i = 0; i < MOB_COUNT; i++){
+            createMob(i + MAX_PROJECTILES, i + MAX_PROJECTILES, 5.0, 1.0, 0.0);
+            hideMob(i + MAX_PROJECTILES);
+            mobProjectiles[i].mobID = i + MAX_PROJECTILES;
+        }
+
         ///
         /// Setup the mobs
         ///
@@ -1054,6 +1073,9 @@ void DrawMob(Mob *mob){
 
 }
 
+void MobShoot(int projectileID){
+    printf("Shoot projectileID %d\n", projectileID);
+}
 //Need a global var to track:
 // - animation state of each mob
 // - position of each mob
