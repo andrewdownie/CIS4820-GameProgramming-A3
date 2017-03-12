@@ -1073,8 +1073,44 @@ void DrawMob(Mob *mob){
 
 }
 
-void MobShoot(int projectileID){
-    printf("Shoot projectileID %d\n", projectileID);
+void MobShoot(int ID){
+    printf("Shoot projectileID %d\n", ID);
+    float playerX, playerY, playerZ;
+    float rotX, rotY, rotZ;
+
+    int projectileInsert = -1;
+    int i;
+
+    //float mobX, mobZ;
+    float moveX, moveY, moveZ;
+    int mobID;
+
+    getViewPosition(&playerX, &playerY, &playerZ);
+    getViewOrientation(&rotX, &rotY, &rotZ);
+
+    if(mobProjectiles[ID].enabled){
+        return;
+    }    
+
+    mobProjectiles[projectileInsert].enabled = 1;
+    mobProjectiles[projectileInsert].timeEnabled = 0;
+
+    moveX = cos((rotY - 90) * 0.0174533f);
+    moveY = -sin((rotX) * 0.0174533f);
+    moveZ = sin((rotY - 90) * 0.0174533f);
+    mobProjectiles[ID].moveX = moveX * PROJECTILE_MOVE_SPEED;
+    mobProjectiles[ID].moveY = moveY * PROJECTILE_MOVE_SPEED;
+    mobProjectiles[ID].moveZ = moveZ * PROJECTILE_MOVE_SPEED; 
+
+    mobProjectiles[ID].x = playerX + 0.5f - moveX * PROJECTILE_SPAWN_DISTANCE;
+    mobProjectiles[ID].y = playerY + 0.5f - moveY * PROJECTILE_SPAWN_DISTANCE;
+    mobProjectiles[ID].z = playerZ + 0.5f - moveZ * PROJECTILE_SPAWN_DISTANCE;
+
+    setMobPosition(mobID, projectiles[projectileInsert].x * -1, projectiles[projectileInsert].y * -1, projectiles[projectileInsert].z * -1, 0);
+    showMob(ID + MAX_PROJECTILES);
+
+    projectileInsert++;
+
 }
 //Need a global var to track:
 // - animation state of each mob
