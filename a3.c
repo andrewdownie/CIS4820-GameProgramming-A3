@@ -844,13 +844,6 @@ void update() {
             }
         }
 
-        ///
-        /// Check if we can see the mob
-        ///
-        int visible = MobVisible(10, 12, 10, 12);
-        // if we can see the mob, they should run away from us.
-        // otherwise they should move randomly i think
-        //printf("Mob is visible %d\n", visible);
 
 
 
@@ -1077,6 +1070,35 @@ void MoveMob(Mob *mob){
     //Left, right, up, down
     int randMove[4] = {1, 1, 1, 1};
     int randDir = rand() % 4;
+    int playerAbove, playerBelow, playerRight, playerLeft;
+    float playerX, playerY, playerZ;
+
+    int seenByPlayer = MobVisible(mob->startX, mob->startX + 3, mob->startZ, mob->endZ + 3);
+
+    getViewPosition(&playerX, &playerY, &playerZ);
+
+    playerAbove = 0;
+    playerBelow = 0;
+    playerRight = 0;
+    playerLeft = 0; 
+
+    if(seenByPlayer){
+        if(playerX > mob->startX + 1){
+            playerBelow = 1;
+        }
+        else{
+            playerAbove = 1;
+        }
+
+        if(playerY > mob->startZ + 1){
+            playerRight = 1;
+        }
+        else{
+            playerLeft = 1;
+        }
+    }
+
+
 
     ///
     /// Move the mob
@@ -1159,36 +1181,43 @@ void MoveMob(Mob *mob){
 
 
 
-    if(randMove[0] == 1 && randDir == 0){
+    if(randMove[0] == 1 && randDir == 0 && !playerLeft){
         mob->endX = mob->startX - 6;
         return;
     }
-    else if(randMove[1] == 1 && randDir <= 1){
+    else if(randMove[1] == 1 && randDir <= 1 && !playerRight){
         mob->endX = mob->startX + 6;
         return;
     }
-    else if(randMove[2] == 1 && randDir <= 2){
+    else if(randMove[2] == 1 && randDir <= 2 && !playerAbove){
         mob->endZ = mob->startZ - 6;
         return;
     }
-    else if(randMove[3] == 1 && randDir <= 3){
+    else if(randMove[3] == 1 && randDir <= 3 && !playerBelow){
         mob->endZ = mob->startZ + 6;
         return;
     }
 
 
-    if(randMove[0] == 1){
+    if(randMove[0] == 1 && !playerLeft){
         mob->endX = mob->startX - 6;
+        return;
     }
-    else if(randMove[1] == 1){
+    else if(randMove[1] == 1 && !playerRight){
         mob->endX = mob->startX + 6;
+        return;
     }
-    else if(randMove[2] == 1){
+    else if(randMove[2] == 1 && !playerAbove){
         mob->endZ = mob->startZ - 6;
+        return;
     }
-    else if(randMove[3] == 1){
+    else if(randMove[3] == 1 && !playerBelow){
         mob->endZ = mob->startZ + 6;
+        return;
     }
+
+    mob->endX = mob->startX;
+    mob->endZ = mob->startZ;
 }
 
 
@@ -1266,22 +1295,12 @@ void MobShoot(int ID){
     mobProjectiles[ID].timeEnabled = 0;
 
 
-    //TODO: make the projectile move towards the players current position
-    /*moveX =;
-    moveY = 
-    moveZ =*/
-    //printf("start x is %d\n", mobs[ID].startX);
-    printf("player x %f, startx %d\n", playerX, mobs[ID].startX);
     mobProjectiles[ID].moveX = -(mobs[ID].startX + playerX + 1) / 5;
     mobProjectiles[ID].moveY = -(playerY + MOB_HEIGHT + 2) / 5; 
     mobProjectiles[ID].moveZ = -(mobs[ID].startZ + playerZ + 1) / 5;
 
-    printf("move x, move z %f %f\n", mobProjectiles[ID].moveX, mobProjectiles[ID].moveZ);
 
 
-    /*mobProjectiles[ID].moveX = 1; 
-    mobProjectiles[ID].moveY = 1;
-    mobProjectiles[ID].moveZ = 1;*/ 
 
     mobProjectiles[ID].x = -mobs[ID].startX - 1;
     mobProjectiles[ID].y = -MOB_HEIGHT - 1;
