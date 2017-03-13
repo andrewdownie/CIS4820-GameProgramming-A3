@@ -1271,9 +1271,10 @@ void MobShoot(int ID){
     moveY = 
     moveZ =*/
     //printf("start x is %d\n", mobs[ID].startX);
-    mobProjectiles[ID].moveX = (mobs[ID].startX - playerX) / 5;
-    mobProjectiles[ID].moveY = (playerY - MOB_HEIGHT + 2) / 5; 
-    mobProjectiles[ID].moveZ = (mobs[ID].startZ - playerZ) / 5;
+    printf("player x %f, startx %d\n", playerX, mobs[ID].startX);
+    mobProjectiles[ID].moveX = -(mobs[ID].startX + playerX + 1) / 5;
+    mobProjectiles[ID].moveY = -(playerY + MOB_HEIGHT + 2) / 5; 
+    mobProjectiles[ID].moveZ = -(mobs[ID].startZ + playerZ + 1) / 5;
 
     printf("move x, move z %f %f\n", mobProjectiles[ID].moveX, mobProjectiles[ID].moveZ);
 
