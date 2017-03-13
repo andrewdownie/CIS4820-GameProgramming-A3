@@ -1161,15 +1161,19 @@ void MoveMob(Mob *mob){
 
     if(randMove[0] == 1 && randDir == 0){
         mob->endX = mob->startX - 6;
+        return;
     }
     else if(randMove[1] == 1 && randDir <= 1){
         mob->endX = mob->startX + 6;
+        return;
     }
     else if(randMove[2] == 1 && randDir <= 2){
         mob->endZ = mob->startZ - 6;
+        return;
     }
     else if(randMove[3] == 1 && randDir <= 3){
         mob->endZ = mob->startZ + 6;
+        return;
     }
 
 
