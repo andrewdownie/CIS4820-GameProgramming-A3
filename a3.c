@@ -180,6 +180,7 @@ void MobShoot(int projectileID);
 ///
 /// Wall and floor manipulation forward declarations ------
 ///
+int PreventCollision();
 void SetupWall(Wall **targetWall, Wall **adjacentWall, GenerationInfo *genInfo);
 void ChangeWalls();
 void SetupWalls();
@@ -377,13 +378,9 @@ void collisionResponse() {
           currentPiece = WalkablePiece(curIndex_x, curIndex_y, curIndex_z);
       }
       else if(curIndex_x >= MAP_SIZE_X - 2){
-          //printf(" 1 Outside game area! x\n");
           curPos_x = (MAP_SIZE_X - 2) * -1;
           curIndex_x = curPos_x * -1;
-          //printf("x%d y%d z%d\n", curIndex_x, curIndex_y, curIndex_z);
-          currentPiece = WalkablePiece(curIndex_x, curIndex_y, curIndex_z);////////////////////////////////TODO: this
-          //printf(" 2 Outside game area! x\n");
-          //TODO: this bug still here, fly to x edge, and exit fly mode... segfault
+          currentPiece = WalkablePiece(curIndex_x, curIndex_y, curIndex_z);
       }
 
       if(curIndex_z < 1){
@@ -392,11 +389,9 @@ void collisionResponse() {
           currentPiece = WalkablePiece(curIndex_x, curIndex_y, curIndex_z);
       }
       else if(curIndex_z >= MAP_SIZE_Z - 2){
-            //printf(" 1 Outside game area! z\n");
             curPos_z = (MAP_SIZE_Z - 2) * -1;
             curIndex_z = curPos_z;
-            currentPiece = WalkablePiece(curIndex_x, curIndex_y, curIndex_z);/////////////////////////////////////TODO: this
-            //printf(" 2 Outside game area! z\n");
+            currentPiece = WalkablePiece(curIndex_x, curIndex_y, curIndex_z);
       }
 
 
@@ -1183,41 +1178,81 @@ void MoveMob(Mob *mob){
 
     if(randMove[0] == 1 && randDir == 0 && !playerLeft){
         mob->endX = mob->startX - 6;
+        if(PreventCollision()){
+            mob->endX = mob->startX;
+        }
         return;
     }
     else if(randMove[1] == 1 && randDir <= 1 && !playerRight){
         mob->endX = mob->startX + 6;
+        if(PreventCollision()){
+            mob->endX = mob->startX;
+        }
         return;
     }
     else if(randMove[2] == 1 && randDir <= 2 && !playerAbove){
         mob->endZ = mob->startZ - 6;
+        if(PreventCollision()){
+            mob->endZ = mob->startZ;
+        }
         return;
     }
     else if(randMove[3] == 1 && randDir <= 3 && !playerBelow){
         mob->endZ = mob->startZ + 6;
+        if(PreventCollision()){
+            mob->endZ = mob->startZ;
+        }
         return;
     }
 
 
     if(randMove[0] == 1 && !playerLeft){
         mob->endX = mob->startX - 6;
+        if(PreventCollision()){
+            mob->endX = mob->startX;
+        }
         return;
     }
     else if(randMove[1] == 1 && !playerRight){
         mob->endX = mob->startX + 6;
+        if(PreventCollision()){
+            mob->endX = mob->startX;
+        }
         return;
     }
     else if(randMove[2] == 1 && !playerAbove){
         mob->endZ = mob->startZ - 6;
+        if(PreventCollision()){
+            mob->endZ = mob->startZ;
+        }
         return;
     }
     else if(randMove[3] == 1 && !playerBelow){
         mob->endZ = mob->startZ + 6;
+        if(PreventCollision()){
+            mob->endZ = mob->startZ;
+        }
         return;
     }
 
     mob->endX = mob->startX;
     mob->endZ = mob->startZ;
+}
+
+int PreventCollision(){
+    int i, j;
+
+    for(i = 0; i < MOB_COUNT; i++){
+        for(j = 0; j < MOB_COUNT; j++){
+            if(i != j){
+                if(mobs[i].endX == mobs[j].endX && mobs[i].endZ == mobs[j].endZ){
+                    return 1;
+                }
+            }
+        }        
+    }
+
+    return 0;
 }
 
 
