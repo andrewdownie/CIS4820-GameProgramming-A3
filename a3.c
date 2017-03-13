@@ -1062,10 +1062,10 @@ void MoveMob(Mob *mob){
     int i = 0;
     int height = 0;
 
-    //Left, right, up, down
-    int randMove[4] = {1, 1, 1, 1};
+    int randMove[4] = {1, 1, 1, 1};//Left, right, up, down
     int randDir = rand() % 4;
     int playerAbove, playerBelow, playerRight, playerLeft;
+    int distX, distZ;
     float playerX, playerY, playerZ;
 
     int seenByPlayer = MobVisible(mob->startX, mob->startX + 3, mob->startZ, mob->endZ + 3);
@@ -1076,6 +1076,9 @@ void MoveMob(Mob *mob){
     playerBelow = 0;
     playerRight = 0;
     playerLeft = 0; 
+
+    distX = abs(playerX - mob->startX);
+    distZ = abs(playerX - mob->startZ);
 
     if(seenByPlayer){
         if(playerX > mob->startX + 1){
@@ -1091,6 +1094,15 @@ void MoveMob(Mob *mob){
         else{
             playerLeft = 1;
         }
+    }
+
+    if(distX > distZ){
+        playerRight = 0;
+        playerLeft = 0;
+    }
+    else{
+        playerAbove = 0;
+        playerBelow = 0;
     }
 
 
@@ -1232,6 +1244,7 @@ void MoveMob(Mob *mob){
         if(PreventCollision()){
             mob->endZ = mob->startZ;
         }
+
         return;
     }
 
