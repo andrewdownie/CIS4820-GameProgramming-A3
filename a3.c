@@ -742,6 +742,10 @@ void update() {
 
         }
 
+        for(i = 0; i < MOB_COUNT; i++){
+            DrawMob(&(mobs[i]));
+        }
+
 
         ///
         /// Move projectiles
@@ -1515,7 +1519,10 @@ void PlaceVerticalWall(Wall *wall, int wallX, int wallZ, int deltaTime){
         for(z = 0; z < WALL_LENGTH; z++){
 
             for(yOffset = 0; yOffset < WALL_HEIGHT; yOffset++){
-                world[wallX][1 + yOffset][wallZ + z] = 0;
+                if(world[wallX][1 + yOffset][wallZ + z] != MOB_COLOR){
+
+                    world[wallX][1 + yOffset][wallZ + z] = 0;
+                }
             }
 
         }
@@ -1576,8 +1583,8 @@ void PlaceVerticalWall(Wall *wall, int wallX, int wallZ, int deltaTime){
                     }
                 }
             }
-            else{
-                world[wallX][1 + yOffset][wallZ +z] = 0;
+            else if(world[wallX][1 + yOffset][wallZ + z]){
+                world[wallX][1 + yOffset][wallZ + z] = 0;
             }
 
 
@@ -1618,7 +1625,10 @@ void PlaceHorizontalWall(Wall *wall, int wallX, int wallZ, int deltaTime){
         for(x = 0; x < WALL_LENGTH; x++){
 
             for(yOffset = 0; yOffset < WALL_HEIGHT; yOffset++){
-                world[wallX + x][1 + yOffset][wallZ] = 0;
+                if(world[wallX + x][1 + yOffset][wallZ] != MOB_COLOR){
+
+                    world[wallX + x][1 + yOffset][wallZ] = 0;
+                }
             }
 
         }
@@ -1685,7 +1695,7 @@ void PlaceHorizontalWall(Wall *wall, int wallX, int wallZ, int deltaTime){
                     }
                 }
             }
-            else{
+            else if(world[wallX + x][1 + yOffset][wallZ] != 0){
                 world[wallX + x][1 + yOffset][wallZ] = 0;
             }
 
